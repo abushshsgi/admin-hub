@@ -43,6 +43,8 @@ const searchSchema = z.object({
   page: fallback(z.number().int().min(1), 1).default(1),
 });
 
+type SearchParams = z.infer<typeof searchSchema>;
+
 export const Route = createFileRoute("/admin/barbers")({
   validateSearch: zodValidator(searchSchema),
   component: BarbersPage,
@@ -97,11 +99,11 @@ function BarbersPage() {
       <FilterToolbar
         search={q}
         onSearchChange={(v) =>
-          navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, q: v, page: 1 }) })
+          navigate({ search: (prev: SearchParams) => ({ ...prev, q: v, page: 1 }) })
         }
         region={region}
         onRegionChange={(v) =>
-          navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, region: v, page: 1 }) })
+          navigate({ search: (prev: SearchParams) => ({ ...prev, region: v, page: 1 }) })
         }
         searchPlaceholder="Sartarosh ismi yoki telefoni..."
       />
@@ -224,7 +226,7 @@ function BarbersPage() {
               count={data.count}
               pageSize={PAGE_SIZE}
               onPageChange={(p) =>
-                navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, page: p }) })
+                navigate({ search: (prev: SearchParams) => ({ ...prev, page: p }) })
               }
             />
           </>
