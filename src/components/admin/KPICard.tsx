@@ -1,17 +1,19 @@
 import { cn } from "@/lib/utils";
-import { ArrowDownRight, ArrowUpRight, Minus } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Minus, type LucideIcon } from "lucide-react";
 
 export function KPICard({
   label,
   value,
   delta,
   hint,
+  icon: Icon,
   className,
 }: {
   label: string;
   value: string | number;
   delta?: number;
   hint?: string;
+  icon?: LucideIcon;
   className?: string;
 }) {
   const trend =
@@ -30,7 +32,10 @@ export function KPICard({
         className,
       )}
     >
-      <div className="text-sm font-medium text-muted-foreground">{label}</div>
+      <div className="flex items-center justify-between gap-2">
+        <div className="text-sm font-medium text-muted-foreground">{label}</div>
+        {Icon && <Icon className="size-4 text-muted-foreground" />}
+      </div>
       <div className="mt-3">
         <div className="font-heading text-3xl font-semibold tracking-tight tabular-nums text-foreground">
           {value}
