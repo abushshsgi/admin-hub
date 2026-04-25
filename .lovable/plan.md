@@ -1,80 +1,145 @@
-## Barber Marketplace Admin Panel — UI Prototip
+## Maqsad
 
-To'liq admin panel UI ni mock data bilan quramiz. Backend yo'q — barcha ma'lumotlar mahalliy mock fayllardan keladi.
+Admin panelni "v2" darajasiga ko'tarish: Linear/Notion uslubidagi **command palette + ikki qatlamli sidebar** layout, har bir entity uchun **to'liq tahrir dialog**, **detail sahifalar**, va 6 ta yangi modul (Support, Services, Finance, Broadcast, Audit log, Activity log).
 
-### Dizayn yo'nalishi
+Hammasi mock data ustida ishlaydi (haqiqiy backend yo'q).
 
-- **Asosiy fon**: bejeviy (warm cream, `#F7F6F3` atrofida)
-- **Aksent / matn**: qora va to'q kulrang
-- **Sidebar**: bejeviy, faol element qora fonda oq matn
-- **Kartalar**: oq ustida nozik kulrang chegara, bejeviy fonda kontrast
-- **Status badgelari**: yashil (completed), sariq (in chair), qora (checked in), qizil (cancelled)
-- **Shriftlar**: Outfit (sarlavhalar) + Manrope (matn)
-- **Yumaloq burchaklar, matte soyalar, professional SaaS ko'rinish**
+---
 
-### Sahifalar (route'lar)
+## 1. Yangi Layout — Linear uslubi
 
-| Route | Tavsif |
-|---|---|
-| `/` → redirect `/admin` | Login skip, to'g'ridan-to'g'ri admin |
-| `/admin` | Dashboard — KPI kartalar, region chart, oxirgi bookinglar |
-| `/admin/users` | Mijozlar jadvali — qidiruv, region filter, active toggle, pagination |
-| `/admin/barbers` | Sartaroshlar — qidiruv, region, active switch, delete dialog |
-| `/admin/salons` | Salonlar — qidiruv, status filter (all/pending/published), delete |
-| `/admin/bookings` | Bookinglar feed — sana, status, salon |
-| `/admin/reviews` | Sharhlar — barber filter, min rating, sana oralig'i |
-| `/admin/map` | Xarita — Leaflet bilan salon va barber markerlari, region filter |
+```text
+┌──────┬──────────────┬─────────────────────────────────┐
+│ ICON │ SUB-NAV      │  MAIN CONTENT                   │
+│ rail │ (section     │  ┌─ topbar ──────────────────┐  │
+│      │  ichidagi    │  │ breadcrumb · ⌘K · profile │  │
+│ 56px │  pages)      │  └────────────────────────────┘  │
+│      │ 220px        │                                  │
+│      │              │  page body                       │
+└──────┴──────────────┴─────────────────────────────────┘
+```
 
-### Layout & komponentlar
+- **Icon rail (56px)** — 6 ta asosiy bo'lim: Operations, Network, Catalog, Finance, Support, Settings. Har birida tooltip.
+- **Sub-nav (220px)** — tanlangan section ichidagi sahifalar (masalan, Network → Salons / Barbers / Users / Reviews / Audit).
+- **Topbar** — breadcrumb (`Network / Barbers / Aziz Karimov`), `⌘K` tugmasi, notifications bell, profile dropdown.
+- **Cmd+K command palette** — global qidiruv: routes, entities (user/barber/salon ID bo'yicha), tezkor amallar ("Yangi salon yaratish", "Bronlarni eksport").
 
-- **AdminLayout**: bejeviy fonli sidebar (ShearHQ logo) + top header (qidiruv + profil) + Outlet
-- **Sidebar guruhlash**: "Operations" (Dashboard, Bookings, Map) va "Network" (Salons, Barbers, Users, Reviews)
-- **Active route**: qora fon, oq matn
-- **Mobil**: sidebar collapse bo'ladi (Sheet drawer)
+Mobile: icon rail + sub-nav birgalikda Sheet ichida ochiladi.
 
-### Qayta ishlatiladigan UI patternlar
+**Sections:**
+- Operations: Dashboard, Bookings, Map
+- Network: Salons, Barbers, Users, Reviews
+- Catalog: Services, Categories
+- Finance: Revenue, Payouts, Transactions
+- Support: Tickets, Broadcast (Notifications)
+- Settings: Audit log, Admins, Profile
 
-- **DataTable**: sticky header, hover state, status badge ustuni, action dropdown
-- **FilterToolbar**: qidiruv input + region select + status tugmalar guruhi
-- **DeleteConfirmDialog**: target state pattern, "Bekor qilish" / "O'chirish"
-- **StatusBadge**: variant prop (`pending | published | active | inactive | completed | in-chair`)
-- **EmptyState**: ikon + xabar + CTA
-- **Skeleton**: jadval va kartalar uchun loading
-- **KPICard**: title, value, delta (%), trend rangi
+---
 
-### Mock data qatlami
+## 2. Yangi sahifalar
 
-`src/lib/mock-data.ts` ichida:
-- `mockUsers` (50 ta), `mockBarbers` (40 ta), `mockSalons` (25 ta)
-- `mockBookings` (60 ta), `mockReviews` (35 ta)
-- `mockStats` (KPI'lar + region breakdown)
-- `mockRegions` (Toshkent, Samarqand, Buxoro, Farg'ona, Namangan)
+### Detail pages (har bir entity uchun)
+- `/admin/users/$userId` — profil, bronlar tarixi, sharhlar, faollik (timeline), tahrir tugmasi
+- `/admin/barbers/$barberId` — profil, joylashuv map, bronlar, sharhlar, daromad statistikasi, salon biriktirish
+- `/admin/salons/$salonId` — info, sartaroshlar ro'yxati, bronlar, daromad, joylashuv, gallery (mock)
+- `/admin/bookings/$bookingId` — booking detali, status timeline, mijoz/sartarosh kartochkalari, qaytarish/bekor qilish
 
-`src/lib/mock-api.ts` da soxta API funksiyalar (300ms delay bilan): `fetchAdminStats`, `fetchAdminUsers({q, region, page})`, `fetchAdminBarbers`, `fetchAdminSalons({q, region, published})`, `fetchAdminBookings`, `fetchAdminReviews`, va `patch*` / `delete*` funksiyalari (in-memory yangilanadi).
+### Support modul
+- `/admin/support` — ticket ro'yxati (open/pending/resolved, prioritet, kategoriya bo'yicha filter)
+- `/admin/support/$ticketId` — chat-style reply thread, status o'zgartirish, biriktirish (assign to admin)
 
-### Asosiy patternlar
+### Catalog modul
+- `/admin/services` — xizmatlar CRUD (nom, narx, davomiyligi, kategoriya, faol/nofaol)
+- `/admin/categories` — kategoriyalar CRUD (nom, ikonka, tartib)
 
-- **TanStack Query**: `useQuery` + `queryKey: ["admin", "users", {page, q, region}]`
-- **URL search params**: filter holati URL'da (`?q=...&region=...&page=2`) — `validateSearch` + zod
-- **Mutation flow**: `patchAdminUser` → `invalidateQueries(["admin", "users"])` + toast
-- **Pagination**: `pageSize=10`, `totalPages = ceil(count/pageSize)`, prev/next disabled
-- **Xarita**: `react-leaflet` + dynamic import (SSR'siz), default markaz O'zbekiston, marker count > 1 bo'lsa `fitBounds`
+### Finance modul
+- `/admin/finance` — daromad dashboard (haftalik/oylik chart, top sartaroshlar, hudud bo'yicha taqsimot)
+- `/admin/finance/payouts` — sartaroshlarga to'lovlar (pending/paid/failed, eksport)
+- `/admin/finance/transactions` — barcha tranzaksiyalar log (booking → payment → commission → payout)
 
-### Texnik qism
+### Notifications
+- `/admin/broadcast` — xabar yuborish (audience: all / region / role), tarix, statistika (yuborildi/o'qildi)
 
-- Stack: TanStack Start + TanStack Router + TanStack Query + Tailwind v4 + shadcn
-- `src/styles.css`: yangi semantic tokenlar — `--background` (bejeviy), `--card` (oq), `--foreground` (qora), `--sidebar` (bejeviy), `--sidebar-accent` (qora), va status ranglar
-- Yangi paketlar: `react-leaflet`, `leaflet`, `@tanstack/zod-adapter`, `zod`, `date-fns`, `sonner` (toast)
-- Har bir route faylida `errorComponent` va `notFoundComponent`
-- `__root.tsx`: `QueryClientProvider` wrapper + `Toaster`
-- `/` route → `/admin` ga redirect
+### Audit & Settings
+- `/admin/audit` — admin amallari log (kim, qachon, nima o'zgartirdi, IP, before/after diff)
+- `/admin/admins` — admin foydalanuvchilar (rollar: superadmin, moderator, finance, support)
+- `/admin/profile` — admin o'zining profili
 
-### Bajarish ketma-ketligi
+---
 
-1. Design tokenlarni `src/styles.css` ga qo'shish (bejeviy palette)
-2. Mock data va mock-api fayllar
-3. AdminLayout + Sidebar + AuthGuard (mock — har doim ok)
-4. Reusable komponentlar: KPICard, StatusBadge, FilterToolbar, DeleteDialog, EmptyState
-5. 7 ta route fayl + ularning page komponentlari
-6. Map sahifasi (leaflet bilan)
-7. `/` route redirect + Toaster
+## 3. To'liq tahrir dialoglari
+
+Har bir resurs uchun **EditDialog** komponenti (`react-hook-form` + `zod`):
+
+- **EditUserDialog** — name, phone, email, region, avatar URL, is_active, izoh
+- **EditBarberDialog** — name, avatar, phone, region, salon biriktirish (Select), lat/lng, rating override, is_active
+- **EditSalonDialog** — name, address, region, lat/lng (map picker), published, telefon, ish vaqti, gallery URL
+- **EditBookingDialog** — status, narx, vaqt, izoh
+- **EditServiceDialog** — name, kategoriya, narx, davomiyligi (min), is_active
+- **EditTicketDialog** — status, prioritet, assign
+
+**+ Yangi qo'shish** — har bir ro'yxat ustida `+ New` tugma, xuddi shu dialogni `mode="create"` bilan ochadi.
+
+---
+
+## 4. Mock data kengaytmasi
+
+`src/lib/mock-data.ts` ga qo'shiladi:
+- `mockServices` (15 ta), `mockCategories` (6 ta)
+- `mockTickets` (20 ta) + `mockTicketReplies`
+- `mockTransactions` (100 ta), `mockPayouts` (30 ta)
+- `mockBroadcasts` (10 ta)
+- `mockAuditLog` (50 ta) — `{ admin, action, target, before, after, ts, ip }`
+- `mockAdmins` (5 ta) + rollar
+- `mockActivity` (har bir user/barber uchun timeline events)
+
+`src/lib/mock-api.ts` ga mos CRUD funksiyalar (delay + in-memory store + invalidation).
+
+---
+
+## 5. Texnik detallar
+
+**Yangi shadcn komponentlar (allaqachon mavjud):** dialog, command, tabs, popover, dropdown-menu, scroll-area, form, breadcrumb. Yangi paket o'rnatish shart emas (`react-hook-form`, `@hookform/resolvers` o'rnatiladi).
+
+**Routing:**
+- File-based, flat dot syntax: `admin.users.$userId.tsx`, `admin.support.$ticketId.tsx`, va h.k.
+- Har bir route: `validateSearch` + `errorComponent` + `notFoundComponent`.
+- `loaderDeps` faqat kerakli search paramlarni qaytaradi.
+
+**State:**
+- TanStack Query: `["admin", resource, params]` key konvensiyasi saqlanadi.
+- Mutation `onSuccess` da tegishli queriesni invalidate qiladi + optimistic update bookings/status uchun.
+
+**Cmd+K:**
+- `cmdk` (shadcn `command` allaqachon ishlatadi). Global hotkey listener `useEffect` da.
+- Static routes + dynamic search (mock-api dan top 10 natija).
+
+**Layout files:**
+- `src/components/admin/AdminShell.tsx` — yangi double sidebar shell (eski `AdminLayout` o'rnini bosadi)
+- `src/components/admin/IconRail.tsx`, `SubNav.tsx`, `TopBar.tsx`, `CommandPalette.tsx`
+- `src/components/admin/edit-dialogs/` — har bir EditXDialog
+- `src/components/admin/DetailHeader.tsx`, `ActivityTimeline.tsx`, `StatTile.tsx`
+
+**Theme:** mavjud bezhe/cream tema saqlanadi (`--background: oklch(0.972 ...)`).
+
+---
+
+## 6. Yetkazib berish bosqichlari
+
+1. Mock data + API kengaytmasi (services, tickets, finance, audit, admins, activity)
+2. Yangi `AdminShell` (icon rail + sub-nav + topbar + Cmd+K)
+3. `react-hook-form` o'rnatish + barcha EditDialog komponentlari
+4. Detail sahifalar (users / barbers / salons / bookings)
+5. Catalog (services + categories)
+6. Support tickets (list + detail + reply)
+7. Finance (revenue + payouts + transactions)
+8. Broadcast + Audit log + Admins + Profile
+9. Mavjud list pagelarni yangilash: `+ New` tugma, har bir qatorga "Tahrirlash" amali, detail sahifaga link
+
+---
+
+## Eslatma
+
+- Hammasi UI prototip — haqiqiy backend ishlatilmaydi.
+- Cmd+K, tahrir dialoglari, status o'zgarishlari — barchasi mock-api ustida darhol ishlaydi (delay 280ms).
+- Bulk actions va inline edit hozircha qo'shilmaydi (siz ulardan **Full edit dialog** ni tanladingiz). Keyin so'rasangiz — qo'shamiz.
