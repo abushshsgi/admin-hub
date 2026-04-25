@@ -377,8 +377,8 @@ export function EditSalonDialog({
 const serviceSchema = z.object({
   name: z.string().min(2),
   category_id: z.string().min(1),
-  price: z.coerce.number().min(0),
-  duration_min: z.coerce.number().min(5),
+  price: z.number().min(0),
+  duration_min: z.number().min(5),
   is_active: z.boolean(),
 });
 export type ServiceFormValues = z.infer<typeof serviceSchema>;
@@ -471,7 +471,7 @@ export function EditServiceDialog({
 // =================== BOOKING ===================
 const bookingSchema = z.object({
   status: z.enum(["pending", "confirmed", "in_chair", "completed", "cancelled"]),
-  price: z.coerce.number().min(0),
+  price: z.number().min(0),
 });
 export type BookingFormValues = z.infer<typeof bookingSchema>;
 
