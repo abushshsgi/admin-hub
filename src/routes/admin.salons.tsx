@@ -100,11 +100,11 @@ function SalonsPage() {
         <FilterToolbar
           search={q}
           onSearchChange={(v) =>
-            navigate({ search: (prev) => ({ ...prev, q: v, page: 1 }) })
+            navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, q: v, page: 1 }) })
           }
           region={region}
           onRegionChange={(v) =>
-            navigate({ search: (prev) => ({ ...prev, region: v, page: 1 }) })
+            navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, region: v, page: 1 }) })
           }
           searchPlaceholder="Salon nomi bo'yicha qidirish..."
         />
@@ -115,7 +115,7 @@ function SalonsPage() {
             <button
               key={t.key}
               onClick={() =>
-                navigate({ search: (prev) => ({ ...prev, status: t.key, page: 1 }) })
+                navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, status: t.key, page: 1 }) })
               }
               className={cn(
                 "px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
@@ -224,7 +224,7 @@ function SalonsPage() {
               count={data.count}
               pageSize={PAGE_SIZE}
               onPageChange={(p) =>
-                navigate({ search: (prev) => ({ ...prev, page: p }) })
+                navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, page: p }) })
               }
             />
           </>
