@@ -1,17 +1,19 @@
 import { cn } from "@/lib/utils";
-import { ArrowDownRight, ArrowUpRight, Minus } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Minus, type LucideIcon } from "lucide-react";
 
 export function KPICard({
   label,
   value,
   delta,
   hint,
+  icon: Icon,
   className,
 }: {
   label: string;
   value: string | number;
   delta?: number;
   hint?: string;
+  icon?: LucideIcon;
   className?: string;
 }) {
   const trend =
