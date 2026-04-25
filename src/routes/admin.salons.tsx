@@ -37,6 +37,8 @@ const searchSchema = z.object({
   page: fallback(z.number().int().min(1), 1).default(1),
 });
 
+type SearchParams = z.infer<typeof searchSchema>;
+
 export const Route = createFileRoute("/admin/salons")({
   validateSearch: zodValidator(searchSchema),
   component: SalonsPage,
@@ -100,11 +102,11 @@ function SalonsPage() {
         <FilterToolbar
           search={q}
           onSearchChange={(v) =>
-            navigate({ search: (prev) => ({ ...prev, q: v, page: 1 }) })
+            navigate({ search: (prev: SearchParams) => ({ ...prev, q: v, page: 1 }) })
           }
           region={region}
           onRegionChange={(v) =>
-            navigate({ search: (prev) => ({ ...prev, region: v, page: 1 }) })
+            navigate({ search: (prev: SearchParams) => ({ ...prev, region: v, page: 1 }) })
           }
           searchPlaceholder="Salon nomi bo'yicha qidirish..."
         />
@@ -115,7 +117,7 @@ function SalonsPage() {
             <button
               key={t.key}
               onClick={() =>
-                navigate({ search: (prev) => ({ ...prev, status: t.key, page: 1 }) })
+                navigate({ search: (prev: SearchParams) => ({ ...prev, status: t.key, page: 1 }) })
               }
               className={cn(
                 "px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
@@ -224,7 +226,7 @@ function SalonsPage() {
               count={data.count}
               pageSize={PAGE_SIZE}
               onPageChange={(p) =>
-                navigate({ search: (prev) => ({ ...prev, page: p }) })
+                navigate({ search: (prev: SearchParams) => ({ ...prev, page: p }) })
               }
             />
           </>
