@@ -20,10 +20,10 @@ function FinancePage() {
       {d && (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <KPICard label="Umumiy daromad" value={`${(d.revenue_total / 1_000_000).toFixed(1)}M so'm`} icon={TrendingUp} delta={5.2} />
-            <KPICard label="Bu hafta" value={`${(d.revenue_week / 1_000_000).toFixed(1)}M so'm`} icon={Receipt} delta={8.1} />
-            <KPICard label="Komissiya" value={`${(d.commission_total / 1_000_000).toFixed(1)}M so'm`} icon={Wallet} delta={4.8} />
-            <KPICard label="Kutilayotgan" value={`${(d.pending_payouts / 1_000_000).toFixed(1)}M so'm`} icon={Users} delta={-1.2} />
+            <KPICard label="Umumiy daromad" value={`${(d.revenue_total / 1_000_000).toFixed(1)}M so'm`} delta={5.2} />
+            <KPICard label="Bu hafta" value={`${(d.revenue_week / 1_000_000).toFixed(1)}M so'm`} delta={8.1} />
+            <KPICard label="Komissiya" value={`${(d.commission_total / 1_000_000).toFixed(1)}M so'm`} delta={4.8} />
+            <KPICard label="Kutilayotgan" value={`${(d.pending_payouts / 1_000_000).toFixed(1)}M so'm`} delta={-1.2} />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
