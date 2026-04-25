@@ -154,16 +154,14 @@ export function AdminLayout() {
       <main className="flex-1 flex flex-col min-w-0">
         <header className="h-16 shrink-0 flex items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 bg-card border-b border-border">
           <div className="flex items-center gap-2 flex-1">
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="lg:hidden"
-                onClick={() => setMobileOpen(true)}
-              >
-                {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-              </Button>
-            </SheetTrigger>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden"
+              onClick={() => setMobileOpen(true)}
+            >
+              {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+            </Button>
 
             <div className="flex items-center w-full max-w-sm bg-background rounded-full px-4 py-1.5 border border-border focus-within:border-foreground/20 transition-colors">
               <Search className="size-4 text-muted-foreground mr-2 shrink-0" />
