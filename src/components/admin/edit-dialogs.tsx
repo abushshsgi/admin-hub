@@ -444,14 +444,14 @@ export function EditServiceDialog({
             <FormField name="price" control={form.control} render={({ field }) => (
               <FormItem>
                 <FormLabel>Narx (so'm)</FormLabel>
-                <FormControl><Input type="number" {...field} /></FormControl>
+                <FormControl><Input type="number" {...field} onChange={(e) => field.onChange(e.target.valueAsNumber || 0)} /></FormControl>
                 <FormMessage />
               </FormItem>
             )} />
             <FormField name="duration_min" control={form.control} render={({ field }) => (
               <FormItem>
                 <FormLabel>Davomiyligi (min)</FormLabel>
-                <FormControl><Input type="number" {...field} /></FormControl>
+                <FormControl><Input type="number" {...field} onChange={(e) => field.onChange(e.target.valueAsNumber || 0)} /></FormControl>
                 <FormMessage />
               </FormItem>
             )} />
@@ -524,7 +524,7 @@ export function EditBookingDialog({
           <FormField name="price" control={form.control} render={({ field }) => (
             <FormItem>
               <FormLabel>Narx</FormLabel>
-              <FormControl><Input type="number" {...field} /></FormControl>
+              <FormControl><Input type="number" {...field} onChange={(e) => field.onChange(e.target.valueAsNumber || 0)} /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
