@@ -37,7 +37,7 @@ function ClientsPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <EmptyState title="Hech qanday mijoz topilmadi" description="Boshqa kalit so'z bilan urinib ko'ring." />
+        <EmptyBlock title="Hech qanday mijoz topilmadi" description="Boshqa kalit so'z bilan urinib ko'ring." />
       ) : (
         <div className="rounded-xl border border-border bg-card overflow-hidden shadow-card">
           <div className="grid grid-cols-12 gap-4 px-5 py-3 text-xs uppercase tracking-wider text-muted-foreground border-b border-border bg-muted/40">
