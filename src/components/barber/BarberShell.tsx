@@ -18,6 +18,12 @@ import {
   ArrowLeftRight,
   Sparkles,
   Scissors,
+  Wallet,
+  BarChart3,
+  Megaphone,
+  Settings,
+  HelpCircle,
+  CalendarDays,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -46,16 +52,23 @@ type NavItem = {
   to: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
+  group?: string;
 };
 
 const INDEPENDENT_NAV: NavItem[] = [
-  { to: "/barber", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/barber/bookings", label: "Bronlar", icon: CalendarClock },
-  { to: "/barber/clients", label: "Mijozlar", icon: Users },
-  { to: "/barber/chat", label: "Chat", icon: MessageSquare },
-  { to: "/barber/reviews", label: "Sharhlar", icon: Star },
-  { to: "/barber/notifications", label: "Bildirishnomalar", icon: Bell },
-  { to: "/barber/profile", label: "Profil", icon: UserCog },
+  { to: "/barber", label: "Dashboard", icon: LayoutDashboard, group: "Asosiy" },
+  { to: "/barber/calendar", label: "Kalendar", icon: CalendarDays, group: "Asosiy" },
+  { to: "/barber/bookings", label: "Bronlar", icon: CalendarClock, group: "Asosiy" },
+  { to: "/barber/clients", label: "Mijozlar", icon: Users, group: "Asosiy" },
+  { to: "/barber/chat", label: "Chat", icon: MessageSquare, group: "Aloqa" },
+  { to: "/barber/notifications", label: "Bildirishnomalar", icon: Bell, group: "Aloqa" },
+  { to: "/barber/reviews", label: "Sharhlar", icon: Star, group: "Aloqa" },
+  { to: "/barber/earnings", label: "Daromad", icon: Wallet, group: "Biznes" },
+  { to: "/barber/stats", label: "Statistika", icon: BarChart3, group: "Biznes" },
+  { to: "/barber/marketing", label: "Marketing", icon: Megaphone, group: "Biznes" },
+  { to: "/barber/profile", label: "Profil", icon: UserCog, group: "Sozlama" },
+  { to: "/barber/settings", label: "Sozlamalar", icon: Settings, group: "Sozlama" },
+  { to: "/barber/help", label: "Yordam", icon: HelpCircle, group: "Sozlama" },
 ];
 
 const SALON_NAV: NavItem[] = [
@@ -113,30 +126,49 @@ function Sidebar({
       )}
 
       {/* Nav */}
-      <nav className="flex-1 p-3 flex flex-col gap-0.5 overflow-y-auto">
-        {nav.map((item) => {
-          const Icon = item.icon;
-          const active =
-            item.to === "/barber"
-              ? pathname === "/barber"
-              : pathname === item.to || pathname.startsWith(item.to + "/");
-          return (
-            <Link
-              key={item.to}
-              to={item.to}
-              onClick={onNavigate}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
-                active
-                  ? "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+      <nav className="flex-1 p-3 overflow-y-auto">
+        {(() => {
+          const groups = nav.reduce<Record<string, NavItem[]>>((acc, item) => {
+            const g = item.group ?? "—";
+            (acc[g] ??= []).push(item);
+            return acc;
+          }, {});
+          const order = Object.keys(groups);
+          return order.map((g) => (
+            <div key={g} className="mb-4 last:mb-0">
+              {g !== "—" && (
+                <div className="px-3 mb-1 text-[10px] uppercase tracking-wider text-muted-foreground/70 font-semibold">
+                  {g}
+                </div>
               )}
-            >
-              <Icon className="size-4 shrink-0" />
-              <span>{item.label}</span>
-            </Link>
-          );
-        })}
+              <div className="flex flex-col gap-0.5">
+                {groups[g].map((item) => {
+                  const Icon = item.icon;
+                  const active =
+                    item.to === "/barber"
+                      ? pathname === "/barber"
+                      : pathname === item.to || pathname.startsWith(item.to + "/");
+                  return (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      onClick={onNavigate}
+                      className={cn(
+                        "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
+                        active
+                          ? "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
+                          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                      )}
+                    >
+                      <Icon className="size-4 shrink-0" />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ));
+        })()}
       </nav>
 
       {/* Profile card */}
@@ -245,9 +277,13 @@ function Topbar({
               <UserCog className="size-4 mr-2" />
               Profil
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate({ to: "/admin" })}>
-              <ArrowLeftRight className="size-4 mr-2" />
-              Admin panel
+            <DropdownMenuItem onClick={() => navigate({ to: "/barber/settings" })}>
+              <Settings className="size-4 mr-2" />
+              Sozlamalar
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate({ to: "/barber/help" })}>
+              <HelpCircle className="size-4 mr-2" />
+              Yordam
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem

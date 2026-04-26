@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Search, Phone } from "lucide-react";
 import { useState } from "react";
 import { useBarberContext, formatUZS } from "@/components/barber/BarberContext";
-import { EmptyState } from "@/components/admin/EmptyState";
+import { EmptyBlock } from "@/components/barber/primitives";
 
 export const Route = createFileRoute("/barber/clients")({
   component: ClientsPage,
@@ -37,7 +37,7 @@ function ClientsPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <EmptyState title="Hech qanday mijoz topilmadi" description="Boshqa kalit so'z bilan urinib ko'ring." />
+        <EmptyBlock title="Hech qanday mijoz topilmadi" description="Boshqa kalit so'z bilan urinib ko'ring." />
       ) : (
         <div className="rounded-xl border border-border bg-card overflow-hidden shadow-card">
           <div className="grid grid-cols-12 gap-4 px-5 py-3 text-xs uppercase tracking-wider text-muted-foreground border-b border-border bg-muted/40">

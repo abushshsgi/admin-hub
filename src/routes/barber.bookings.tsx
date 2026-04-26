@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Play, CheckCircle2, Phone } from "lucide-react";
+import { Play, CheckCircle2, Phone, X } from "lucide-react";
 import { useBarberContext, formatUZS } from "@/components/barber/BarberContext";
-import { StatusBadge, type StatusVariant } from "@/components/admin/StatusBadge";
+import { StatusPill } from "@/components/barber/primitives";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/barber/bookings")({
@@ -11,21 +11,14 @@ export const Route = createFileRoute("/barber/bookings")({
 
 const TABS = [
   { id: "all", label: "Hammasi" },
+  { id: "pending", label: "Yangi" },
   { id: "accepted", label: "Tasdiqlangan" },
   { id: "in_progress", label: "Davom etmoqda" },
   { id: "completed", label: "Yakunlangan" },
 ] as const;
 
-const STATUS_MAP: Record<string, StatusVariant> = {
-  pending: "pending",
-  accepted: "confirmed",
-  in_progress: "in_chair",
-  completed: "completed",
-  cancelled: "cancelled",
-};
-
 function BookingsPage() {
-  const { bookings, startBooking, completeBooking } = useBarberContext();
+  const { bookings, startBooking, completeBooking, acceptBooking, cancelBooking } = useBarberContext();
   const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("all");
 
   const filtered = tab === "all" ? bookings : bookings.filter((b) => b.status === tab);
@@ -90,11 +83,28 @@ function BookingsPage() {
                   <div className="text-xs text-muted-foreground">Narx</div>
                   <div className="font-medium">{formatUZS(b.price)}</div>
                 </div>
-                <StatusBadge status={STATUS_MAP[b.status]} />
+                <StatusPill status={b.status} />
                 <div className="flex items-center gap-2 ml-auto">
                   <button className="size-9 rounded-lg border border-border hover:bg-muted transition-colors flex items-center justify-center">
                     <Phone className="size-4" />
                   </button>
+                  {b.status === "pending" && (
+                    <>
+                      <button
+                        onClick={() => cancelBooking(b.id)}
+                        className="size-9 rounded-lg border border-border hover:bg-destructive/10 hover:text-destructive transition-colors flex items-center justify-center"
+                      >
+                        <X className="size-4" />
+                      </button>
+                      <button
+                        onClick={() => acceptBooking(b.id)}
+                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-foreground text-background text-sm font-medium hover:opacity-90"
+                      >
+                        <CheckCircle2 className="size-3.5" />
+                        Qabul qilish
+                      </button>
+                    </>
+                  )}
                   {b.status === "accepted" && (
                     <button
                       onClick={() => startBooking(b.id)}

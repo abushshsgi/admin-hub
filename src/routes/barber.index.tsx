@@ -10,20 +10,11 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useBarberContext, formatUZS } from "@/components/barber/BarberContext";
-import { StatusBadge } from "@/components/admin/StatusBadge";
-import type { StatusVariant } from "@/components/admin/StatusBadge";
+import { StatusPill } from "@/components/barber/primitives";
 
 export const Route = createFileRoute("/barber/")({
   component: BarberDashboard,
 });
-
-const STATUS_MAP: Record<string, StatusVariant> = {
-  pending: "pending",
-  accepted: "confirmed",
-  in_progress: "in_chair",
-  completed: "completed",
-  cancelled: "cancelled",
-};
 
 function BarberDashboard() {
   const {
@@ -166,7 +157,7 @@ function BarberDashboard() {
                   <div className="text-xs text-muted-foreground truncate">{b.service}</div>
                 </div>
                 <div className="hidden sm:block text-sm font-medium">{formatUZS(b.price)}</div>
-                <StatusBadge status={STATUS_MAP[b.status]} />
+                <StatusPill status={b.status} />
                 {b.status === "accepted" && (
                   <button
                     onClick={() => startBooking(b.id)}
