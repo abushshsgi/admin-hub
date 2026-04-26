@@ -96,6 +96,36 @@ export type Salon = {
   gallery: string[];
 };
 
+export type Transaction = {
+  id: string;
+  date: string;
+  client: string;
+  service: string;
+  amount: number;
+  kind: "booking" | "tip" | "payout" | "refund";
+  status: "completed" | "pending" | "failed";
+};
+
+export type Promo = {
+  id: string;
+  code: string;
+  description: string;
+  discount_pct: number;
+  uses: number;
+  max_uses: number;
+  is_active: boolean;
+  expires: string;
+};
+
+export type Settings = {
+  notifications_email: boolean;
+  notifications_push: boolean;
+  notifications_sms: boolean;
+  auto_accept: boolean;
+  language: "uz" | "ru" | "en";
+  theme: "light" | "dark";
+};
+
 type Ctx = {
   viewMode: ViewMode;
   setViewMode: (v: ViewMode) => void;
@@ -110,11 +140,19 @@ type Ctx = {
   conversations: Conversation[];
   reviews: Review[];
   salon: Salon;
+  transactions: Transaction[];
+  promos: Promo[];
+  settings: Settings;
   startBooking: (id: string) => void;
   completeBooking: (id: string) => void;
+  cancelBooking: (id: string) => void;
+  acceptBooking: (id: string) => void;
   markNotificationRead: (id: string) => void;
+  markAllNotificationsRead: () => void;
   sendChatMessage: (conversationId: string, text: string) => void;
   toggleService: (id: string) => void;
+  togglePromo: (id: string) => void;
+  updateSettings: (patch: Partial<Settings>) => void;
 };
 
 const BarberCtx = createContext<Ctx | null>(null);
@@ -396,12 +434,37 @@ const SALON: Salon = {
   ],
 };
 
+const TRANSACTIONS_INIT: Transaction[] = [
+  { id: "t1", date: "Bugun, 10:30", client: "Sherzod A.", service: "Klassik", amount: 80000, kind: "booking", status: "completed" },
+  { id: "t2", date: "Bugun, 09:15", client: "Abdulla M.", service: "Klassik", amount: 80000, kind: "booking", status: "completed" },
+  { id: "t3", date: "Bugun, 09:20", client: "Abdulla M.", service: "Tip", amount: 20000, kind: "tip", status: "completed" },
+  { id: "t4", date: "Kecha, 17:45", client: "Anvar T.", service: "Soqol", amount: 50000, kind: "booking", status: "completed" },
+  { id: "t5", date: "Kecha, 12:00", client: "—", service: "Haftalik to'lov", amount: -450000, kind: "payout", status: "completed" },
+  { id: "t6", date: "2 kun oldin", client: "Diyor R.", service: "Royal", amount: 200000, kind: "booking", status: "pending" },
+  { id: "t7", date: "3 kun oldin", client: "Otabek S.", service: "Bola sochi", amount: 40000, kind: "refund", status: "failed" },
+];
+
+const PROMOS_INIT: Promo[] = [
+  { id: "p1", code: "WELCOME20", description: "Yangi mijozlar uchun 20%", discount_pct: 20, uses: 34, max_uses: 100, is_active: true, expires: "31 May 2026" },
+  { id: "p2", code: "FRIDAY10", description: "Juma kunlarida 10%", discount_pct: 10, uses: 12, max_uses: 50, is_active: true, expires: "30 Apr 2026" },
+  { id: "p3", code: "SUMMER25", description: "Yozgi aksiya 25%", discount_pct: 25, uses: 0, max_uses: 200, is_active: false, expires: "1 Jun 2026" },
+];
+
 export function BarberProvider({ children }: { children: ReactNode }) {
   const [viewMode, setViewMode] = useState<ViewMode>("independent");
   const [services, setServices] = useState<Service[]>(SERVICES_INIT);
   const [bookings, setBookings] = useState<Booking[]>(BOOKINGS_INIT);
   const [notifications, setNotifications] = useState<Notification[]>(NOTIFICATIONS_INIT);
   const [conversations, setConversations] = useState<Conversation[]>(CONVERSATIONS_INIT);
+  const [promos, setPromos] = useState<Promo[]>(PROMOS_INIT);
+  const [settings, setSettings] = useState<Settings>({
+    notifications_email: true,
+    notifications_push: true,
+    notifications_sms: false,
+    auto_accept: false,
+    language: "uz",
+    theme: "light",
+  });
 
   const value = useMemo<Ctx>(
     () => ({
@@ -418,6 +481,9 @@ export function BarberProvider({ children }: { children: ReactNode }) {
       conversations,
       reviews: REVIEWS,
       salon: SALON,
+      transactions: TRANSACTIONS_INIT,
+      promos,
+      settings,
       startBooking: (id) =>
         setBookings((prev) =>
           prev.map((b) => (b.id === id ? { ...b, status: "in_progress" } : b)),
@@ -426,10 +492,20 @@ export function BarberProvider({ children }: { children: ReactNode }) {
         setBookings((prev) =>
           prev.map((b) => (b.id === id ? { ...b, status: "completed" } : b)),
         ),
+      cancelBooking: (id) =>
+        setBookings((prev) =>
+          prev.map((b) => (b.id === id ? { ...b, status: "cancelled" } : b)),
+        ),
+      acceptBooking: (id) =>
+        setBookings((prev) =>
+          prev.map((b) => (b.id === id ? { ...b, status: "accepted" } : b)),
+        ),
       markNotificationRead: (id) =>
         setNotifications((prev) =>
           prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
         ),
+      markAllNotificationsRead: () =>
+        setNotifications((prev) => prev.map((n) => ({ ...n, read: true }))),
       sendChatMessage: (conversationId, text) =>
         setConversations((prev) =>
           prev.map((c) =>
@@ -455,8 +531,13 @@ export function BarberProvider({ children }: { children: ReactNode }) {
         setServices((prev) =>
           prev.map((s) => (s.id === id ? { ...s, is_active: !s.is_active } : s)),
         ),
+      togglePromo: (id) =>
+        setPromos((prev) =>
+          prev.map((p) => (p.id === id ? { ...p, is_active: !p.is_active } : p)),
+        ),
+      updateSettings: (patch) => setSettings((prev) => ({ ...prev, ...patch })),
     }),
-    [viewMode, services, bookings, notifications, conversations],
+    [viewMode, services, bookings, notifications, conversations, promos, settings],
   );
 
   return <BarberCtx.Provider value={value}>{children}</BarberCtx.Provider>;
