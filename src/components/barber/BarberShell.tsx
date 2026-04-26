@@ -277,9 +277,13 @@ function Topbar({
               <UserCog className="size-4 mr-2" />
               Profil
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate({ to: "/admin" })}>
-              <ArrowLeftRight className="size-4 mr-2" />
-              Admin panel
+            <DropdownMenuItem onClick={() => navigate({ to: "/barber/settings" })}>
+              <Settings className="size-4 mr-2" />
+              Sozlamalar
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate({ to: "/barber/help" })}>
+              <HelpCircle className="size-4 mr-2" />
+              Yordam
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
