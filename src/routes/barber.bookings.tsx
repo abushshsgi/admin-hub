@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Play, CheckCircle2, Phone } from "lucide-react";
+import { Play, CheckCircle2, Phone, X } from "lucide-react";
 import { useBarberContext, formatUZS } from "@/components/barber/BarberContext";
-import { StatusBadge, type StatusVariant } from "@/components/admin/StatusBadge";
+import { StatusPill } from "@/components/barber/primitives";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/barber/bookings")({
@@ -11,21 +11,14 @@ export const Route = createFileRoute("/barber/bookings")({
 
 const TABS = [
   { id: "all", label: "Hammasi" },
+  { id: "pending", label: "Yangi" },
   { id: "accepted", label: "Tasdiqlangan" },
   { id: "in_progress", label: "Davom etmoqda" },
   { id: "completed", label: "Yakunlangan" },
 ] as const;
 
-const STATUS_MAP: Record<string, StatusVariant> = {
-  pending: "pending",
-  accepted: "confirmed",
-  in_progress: "in_chair",
-  completed: "completed",
-  cancelled: "cancelled",
-};
-
 function BookingsPage() {
-  const { bookings, startBooking, completeBooking } = useBarberContext();
+  const { bookings, startBooking, completeBooking, acceptBooking, cancelBooking } = useBarberContext();
   const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("all");
 
   const filtered = tab === "all" ? bookings : bookings.filter((b) => b.status === tab);
