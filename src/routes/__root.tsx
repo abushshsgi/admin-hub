@@ -25,10 +25,10 @@ function NotFoundComponent() {
         </p>
         <div className="mt-6">
           <Link
-            to="/admin"
+            to="/barber"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
           >
-            Admin paneliga
+            Barber paneliga
           </Link>
         </div>
       </div>
@@ -41,10 +41,10 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ShearHQ — Barber Marketplace Admin" },
+      { title: "ShearHQ — Barber Panel" },
       {
         name: "description",
-        content: "Sartaroshxonalar va sartaroshlar tarmog'ini boshqarish uchun admin panel.",
+        content: "Sartaroshlar uchun bookinglar, mijozlar va daromadlarni boshqarish paneli.",
       },
     ],
     links: [
