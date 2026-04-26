@@ -126,30 +126,49 @@ function Sidebar({
       )}
 
       {/* Nav */}
-      <nav className="flex-1 p-3 flex flex-col gap-0.5 overflow-y-auto">
-        {nav.map((item) => {
-          const Icon = item.icon;
-          const active =
-            item.to === "/barber"
-              ? pathname === "/barber"
-              : pathname === item.to || pathname.startsWith(item.to + "/");
-          return (
-            <Link
-              key={item.to}
-              to={item.to}
-              onClick={onNavigate}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
-                active
-                  ? "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+      <nav className="flex-1 p-3 overflow-y-auto">
+        {(() => {
+          const groups = nav.reduce<Record<string, NavItem[]>>((acc, item) => {
+            const g = item.group ?? "—";
+            (acc[g] ??= []).push(item);
+            return acc;
+          }, {});
+          const order = Object.keys(groups);
+          return order.map((g) => (
+            <div key={g} className="mb-4 last:mb-0">
+              {g !== "—" && (
+                <div className="px-3 mb-1 text-[10px] uppercase tracking-wider text-muted-foreground/70 font-semibold">
+                  {g}
+                </div>
               )}
-            >
-              <Icon className="size-4 shrink-0" />
-              <span>{item.label}</span>
-            </Link>
-          );
-        })}
+              <div className="flex flex-col gap-0.5">
+                {groups[g].map((item) => {
+                  const Icon = item.icon;
+                  const active =
+                    item.to === "/barber"
+                      ? pathname === "/barber"
+                      : pathname === item.to || pathname.startsWith(item.to + "/");
+                  return (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      onClick={onNavigate}
+                      className={cn(
+                        "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
+                        active
+                          ? "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
+                          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                      )}
+                    >
+                      <Icon className="size-4 shrink-0" />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ));
+        })()}
       </nav>
 
       {/* Profile card */}
