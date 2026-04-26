@@ -14,11 +14,17 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BarberIndexRouteImport } from './routes/barber.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as BarberStatsRouteImport } from './routes/barber.stats'
+import { Route as BarberSettingsRouteImport } from './routes/barber.settings'
 import { Route as BarberReviewsRouteImport } from './routes/barber.reviews'
 import { Route as BarberProfileRouteImport } from './routes/barber.profile'
 import { Route as BarberNotificationsRouteImport } from './routes/barber.notifications'
+import { Route as BarberMarketingRouteImport } from './routes/barber.marketing'
+import { Route as BarberHelpRouteImport } from './routes/barber.help'
+import { Route as BarberEarningsRouteImport } from './routes/barber.earnings'
 import { Route as BarberClientsRouteImport } from './routes/barber.clients'
 import { Route as BarberChatRouteImport } from './routes/barber.chat'
+import { Route as BarberCalendarRouteImport } from './routes/barber.calendar'
 import { Route as BarberBookingsRouteImport } from './routes/barber.bookings'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminSupportRouteImport } from './routes/admin.support'
@@ -66,6 +72,16 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const BarberStatsRoute = BarberStatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => BarberRoute,
+} as any)
+const BarberSettingsRoute = BarberSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => BarberRoute,
+} as any)
 const BarberReviewsRoute = BarberReviewsRouteImport.update({
   id: '/reviews',
   path: '/reviews',
@@ -81,6 +97,21 @@ const BarberNotificationsRoute = BarberNotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => BarberRoute,
 } as any)
+const BarberMarketingRoute = BarberMarketingRouteImport.update({
+  id: '/marketing',
+  path: '/marketing',
+  getParentRoute: () => BarberRoute,
+} as any)
+const BarberHelpRoute = BarberHelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => BarberRoute,
+} as any)
+const BarberEarningsRoute = BarberEarningsRouteImport.update({
+  id: '/earnings',
+  path: '/earnings',
+  getParentRoute: () => BarberRoute,
+} as any)
 const BarberClientsRoute = BarberClientsRouteImport.update({
   id: '/clients',
   path: '/clients',
@@ -89,6 +120,11 @@ const BarberClientsRoute = BarberClientsRouteImport.update({
 const BarberChatRoute = BarberChatRouteImport.update({
   id: '/chat',
   path: '/chat',
+  getParentRoute: () => BarberRoute,
+} as any)
+const BarberCalendarRoute = BarberCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
   getParentRoute: () => BarberRoute,
 } as any)
 const BarberBookingsRoute = BarberBookingsRouteImport.update({
@@ -217,11 +253,17 @@ export interface FileRoutesByFullPath {
   '/admin/support': typeof AdminSupportRouteWithChildren
   '/admin/users': typeof AdminUsersRoute
   '/barber/bookings': typeof BarberBookingsRoute
+  '/barber/calendar': typeof BarberCalendarRoute
   '/barber/chat': typeof BarberChatRoute
   '/barber/clients': typeof BarberClientsRoute
+  '/barber/earnings': typeof BarberEarningsRoute
+  '/barber/help': typeof BarberHelpRoute
+  '/barber/marketing': typeof BarberMarketingRoute
   '/barber/notifications': typeof BarberNotificationsRoute
   '/barber/profile': typeof BarberProfileRoute
   '/barber/reviews': typeof BarberReviewsRoute
+  '/barber/settings': typeof BarberSettingsRoute
+  '/barber/stats': typeof BarberStatsRoute
   '/admin/': typeof AdminIndexRoute
   '/barber/': typeof BarberIndexRoute
   '/admin/finance/payouts': typeof AdminFinancePayoutsRoute
@@ -248,11 +290,17 @@ export interface FileRoutesByTo {
   '/admin/support': typeof AdminSupportRouteWithChildren
   '/admin/users': typeof AdminUsersRoute
   '/barber/bookings': typeof BarberBookingsRoute
+  '/barber/calendar': typeof BarberCalendarRoute
   '/barber/chat': typeof BarberChatRoute
   '/barber/clients': typeof BarberClientsRoute
+  '/barber/earnings': typeof BarberEarningsRoute
+  '/barber/help': typeof BarberHelpRoute
+  '/barber/marketing': typeof BarberMarketingRoute
   '/barber/notifications': typeof BarberNotificationsRoute
   '/barber/profile': typeof BarberProfileRoute
   '/barber/reviews': typeof BarberReviewsRoute
+  '/barber/settings': typeof BarberSettingsRoute
+  '/barber/stats': typeof BarberStatsRoute
   '/admin': typeof AdminIndexRoute
   '/barber': typeof BarberIndexRoute
   '/admin/finance/payouts': typeof AdminFinancePayoutsRoute
@@ -282,11 +330,17 @@ export interface FileRoutesById {
   '/admin/support': typeof AdminSupportRouteWithChildren
   '/admin/users': typeof AdminUsersRoute
   '/barber/bookings': typeof BarberBookingsRoute
+  '/barber/calendar': typeof BarberCalendarRoute
   '/barber/chat': typeof BarberChatRoute
   '/barber/clients': typeof BarberClientsRoute
+  '/barber/earnings': typeof BarberEarningsRoute
+  '/barber/help': typeof BarberHelpRoute
+  '/barber/marketing': typeof BarberMarketingRoute
   '/barber/notifications': typeof BarberNotificationsRoute
   '/barber/profile': typeof BarberProfileRoute
   '/barber/reviews': typeof BarberReviewsRoute
+  '/barber/settings': typeof BarberSettingsRoute
+  '/barber/stats': typeof BarberStatsRoute
   '/admin/': typeof AdminIndexRoute
   '/barber/': typeof BarberIndexRoute
   '/admin/finance/payouts': typeof AdminFinancePayoutsRoute
@@ -317,11 +371,17 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/admin/users'
     | '/barber/bookings'
+    | '/barber/calendar'
     | '/barber/chat'
     | '/barber/clients'
+    | '/barber/earnings'
+    | '/barber/help'
+    | '/barber/marketing'
     | '/barber/notifications'
     | '/barber/profile'
     | '/barber/reviews'
+    | '/barber/settings'
+    | '/barber/stats'
     | '/admin/'
     | '/barber/'
     | '/admin/finance/payouts'
@@ -348,11 +408,17 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/admin/users'
     | '/barber/bookings'
+    | '/barber/calendar'
     | '/barber/chat'
     | '/barber/clients'
+    | '/barber/earnings'
+    | '/barber/help'
+    | '/barber/marketing'
     | '/barber/notifications'
     | '/barber/profile'
     | '/barber/reviews'
+    | '/barber/settings'
+    | '/barber/stats'
     | '/admin'
     | '/barber'
     | '/admin/finance/payouts'
@@ -381,11 +447,17 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/admin/users'
     | '/barber/bookings'
+    | '/barber/calendar'
     | '/barber/chat'
     | '/barber/clients'
+    | '/barber/earnings'
+    | '/barber/help'
+    | '/barber/marketing'
     | '/barber/notifications'
     | '/barber/profile'
     | '/barber/reviews'
+    | '/barber/settings'
+    | '/barber/stats'
     | '/admin/'
     | '/barber/'
     | '/admin/finance/payouts'
@@ -439,6 +511,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/barber/stats': {
+      id: '/barber/stats'
+      path: '/stats'
+      fullPath: '/barber/stats'
+      preLoaderRoute: typeof BarberStatsRouteImport
+      parentRoute: typeof BarberRoute
+    }
+    '/barber/settings': {
+      id: '/barber/settings'
+      path: '/settings'
+      fullPath: '/barber/settings'
+      preLoaderRoute: typeof BarberSettingsRouteImport
+      parentRoute: typeof BarberRoute
+    }
     '/barber/reviews': {
       id: '/barber/reviews'
       path: '/reviews'
@@ -460,6 +546,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BarberNotificationsRouteImport
       parentRoute: typeof BarberRoute
     }
+    '/barber/marketing': {
+      id: '/barber/marketing'
+      path: '/marketing'
+      fullPath: '/barber/marketing'
+      preLoaderRoute: typeof BarberMarketingRouteImport
+      parentRoute: typeof BarberRoute
+    }
+    '/barber/help': {
+      id: '/barber/help'
+      path: '/help'
+      fullPath: '/barber/help'
+      preLoaderRoute: typeof BarberHelpRouteImport
+      parentRoute: typeof BarberRoute
+    }
+    '/barber/earnings': {
+      id: '/barber/earnings'
+      path: '/earnings'
+      fullPath: '/barber/earnings'
+      preLoaderRoute: typeof BarberEarningsRouteImport
+      parentRoute: typeof BarberRoute
+    }
     '/barber/clients': {
       id: '/barber/clients'
       path: '/clients'
@@ -472,6 +579,13 @@ declare module '@tanstack/react-router' {
       path: '/chat'
       fullPath: '/barber/chat'
       preLoaderRoute: typeof BarberChatRouteImport
+      parentRoute: typeof BarberRoute
+    }
+    '/barber/calendar': {
+      id: '/barber/calendar'
+      path: '/calendar'
+      fullPath: '/barber/calendar'
+      preLoaderRoute: typeof BarberCalendarRouteImport
       parentRoute: typeof BarberRoute
     }
     '/barber/bookings': {
@@ -690,11 +804,17 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface BarberRouteChildren {
   BarberBookingsRoute: typeof BarberBookingsRoute
+  BarberCalendarRoute: typeof BarberCalendarRoute
   BarberChatRoute: typeof BarberChatRoute
   BarberClientsRoute: typeof BarberClientsRoute
+  BarberEarningsRoute: typeof BarberEarningsRoute
+  BarberHelpRoute: typeof BarberHelpRoute
+  BarberMarketingRoute: typeof BarberMarketingRoute
   BarberNotificationsRoute: typeof BarberNotificationsRoute
   BarberProfileRoute: typeof BarberProfileRoute
   BarberReviewsRoute: typeof BarberReviewsRoute
+  BarberSettingsRoute: typeof BarberSettingsRoute
+  BarberStatsRoute: typeof BarberStatsRoute
   BarberIndexRoute: typeof BarberIndexRoute
   BarberSalonViewGalleryRoute: typeof BarberSalonViewGalleryRoute
   BarberSalonViewReviewsRoute: typeof BarberSalonViewReviewsRoute
@@ -703,11 +823,17 @@ interface BarberRouteChildren {
 
 const BarberRouteChildren: BarberRouteChildren = {
   BarberBookingsRoute: BarberBookingsRoute,
+  BarberCalendarRoute: BarberCalendarRoute,
   BarberChatRoute: BarberChatRoute,
   BarberClientsRoute: BarberClientsRoute,
+  BarberEarningsRoute: BarberEarningsRoute,
+  BarberHelpRoute: BarberHelpRoute,
+  BarberMarketingRoute: BarberMarketingRoute,
   BarberNotificationsRoute: BarberNotificationsRoute,
   BarberProfileRoute: BarberProfileRoute,
   BarberReviewsRoute: BarberReviewsRoute,
+  BarberSettingsRoute: BarberSettingsRoute,
+  BarberStatsRoute: BarberStatsRoute,
   BarberIndexRoute: BarberIndexRoute,
   BarberSalonViewGalleryRoute: BarberSalonViewGalleryRoute,
   BarberSalonViewReviewsRoute: BarberSalonViewReviewsRoute,
