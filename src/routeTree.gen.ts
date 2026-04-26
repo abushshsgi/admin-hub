@@ -9,9 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as BarberRouteImport } from './routes/barber'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BarberIndexRouteImport } from './routes/barber.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as BarberReviewsRouteImport } from './routes/barber.reviews'
+import { Route as BarberProfileRouteImport } from './routes/barber.profile'
+import { Route as BarberNotificationsRouteImport } from './routes/barber.notifications'
+import { Route as BarberClientsRouteImport } from './routes/barber.clients'
+import { Route as BarberChatRouteImport } from './routes/barber.chat'
+import { Route as BarberBookingsRouteImport } from './routes/barber.bookings'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminSupportRouteImport } from './routes/admin.support'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
@@ -26,10 +34,18 @@ import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 import { Route as AdminBarbersRouteImport } from './routes/admin.barbers'
 import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as AdminAdminsRouteImport } from './routes/admin.admins'
+import { Route as BarberSalonViewIndexRouteImport } from './routes/barber.salon-view.index'
+import { Route as BarberSalonViewReviewsRouteImport } from './routes/barber.salon-view.reviews'
+import { Route as BarberSalonViewGalleryRouteImport } from './routes/barber.salon-view.gallery'
 import { Route as AdminSupportTicketIdRouteImport } from './routes/admin.support.$ticketId'
 import { Route as AdminFinanceTransactionsRouteImport } from './routes/admin.finance.transactions'
 import { Route as AdminFinancePayoutsRouteImport } from './routes/admin.finance.payouts'
 
+const BarberRoute = BarberRouteImport.update({
+  id: '/barber',
+  path: '/barber',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -40,10 +56,45 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BarberIndexRoute = BarberIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BarberRoute,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const BarberReviewsRoute = BarberReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => BarberRoute,
+} as any)
+const BarberProfileRoute = BarberProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => BarberRoute,
+} as any)
+const BarberNotificationsRoute = BarberNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => BarberRoute,
+} as any)
+const BarberClientsRoute = BarberClientsRouteImport.update({
+  id: '/clients',
+  path: '/clients',
+  getParentRoute: () => BarberRoute,
+} as any)
+const BarberChatRoute = BarberChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => BarberRoute,
+} as any)
+const BarberBookingsRoute = BarberBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => BarberRoute,
 } as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
@@ -115,6 +166,21 @@ const AdminAdminsRoute = AdminAdminsRouteImport.update({
   path: '/admins',
   getParentRoute: () => AdminRoute,
 } as any)
+const BarberSalonViewIndexRoute = BarberSalonViewIndexRouteImport.update({
+  id: '/salon-view/',
+  path: '/salon-view/',
+  getParentRoute: () => BarberRoute,
+} as any)
+const BarberSalonViewReviewsRoute = BarberSalonViewReviewsRouteImport.update({
+  id: '/salon-view/reviews',
+  path: '/salon-view/reviews',
+  getParentRoute: () => BarberRoute,
+} as any)
+const BarberSalonViewGalleryRoute = BarberSalonViewGalleryRouteImport.update({
+  id: '/salon-view/gallery',
+  path: '/salon-view/gallery',
+  getParentRoute: () => BarberRoute,
+} as any)
 const AdminSupportTicketIdRoute = AdminSupportTicketIdRouteImport.update({
   id: '/$ticketId',
   path: '/$ticketId',
@@ -135,6 +201,7 @@ const AdminFinancePayoutsRoute = AdminFinancePayoutsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/barber': typeof BarberRouteWithChildren
   '/admin/admins': typeof AdminAdminsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/barbers': typeof AdminBarbersRoute
@@ -149,10 +216,20 @@ export interface FileRoutesByFullPath {
   '/admin/services': typeof AdminServicesRoute
   '/admin/support': typeof AdminSupportRouteWithChildren
   '/admin/users': typeof AdminUsersRoute
+  '/barber/bookings': typeof BarberBookingsRoute
+  '/barber/chat': typeof BarberChatRoute
+  '/barber/clients': typeof BarberClientsRoute
+  '/barber/notifications': typeof BarberNotificationsRoute
+  '/barber/profile': typeof BarberProfileRoute
+  '/barber/reviews': typeof BarberReviewsRoute
   '/admin/': typeof AdminIndexRoute
+  '/barber/': typeof BarberIndexRoute
   '/admin/finance/payouts': typeof AdminFinancePayoutsRoute
   '/admin/finance/transactions': typeof AdminFinanceTransactionsRoute
   '/admin/support/$ticketId': typeof AdminSupportTicketIdRoute
+  '/barber/salon-view/gallery': typeof BarberSalonViewGalleryRoute
+  '/barber/salon-view/reviews': typeof BarberSalonViewReviewsRoute
+  '/barber/salon-view/': typeof BarberSalonViewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -170,15 +247,26 @@ export interface FileRoutesByTo {
   '/admin/services': typeof AdminServicesRoute
   '/admin/support': typeof AdminSupportRouteWithChildren
   '/admin/users': typeof AdminUsersRoute
+  '/barber/bookings': typeof BarberBookingsRoute
+  '/barber/chat': typeof BarberChatRoute
+  '/barber/clients': typeof BarberClientsRoute
+  '/barber/notifications': typeof BarberNotificationsRoute
+  '/barber/profile': typeof BarberProfileRoute
+  '/barber/reviews': typeof BarberReviewsRoute
   '/admin': typeof AdminIndexRoute
+  '/barber': typeof BarberIndexRoute
   '/admin/finance/payouts': typeof AdminFinancePayoutsRoute
   '/admin/finance/transactions': typeof AdminFinanceTransactionsRoute
   '/admin/support/$ticketId': typeof AdminSupportTicketIdRoute
+  '/barber/salon-view/gallery': typeof BarberSalonViewGalleryRoute
+  '/barber/salon-view/reviews': typeof BarberSalonViewReviewsRoute
+  '/barber/salon-view': typeof BarberSalonViewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/barber': typeof BarberRouteWithChildren
   '/admin/admins': typeof AdminAdminsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/barbers': typeof AdminBarbersRoute
@@ -193,16 +281,27 @@ export interface FileRoutesById {
   '/admin/services': typeof AdminServicesRoute
   '/admin/support': typeof AdminSupportRouteWithChildren
   '/admin/users': typeof AdminUsersRoute
+  '/barber/bookings': typeof BarberBookingsRoute
+  '/barber/chat': typeof BarberChatRoute
+  '/barber/clients': typeof BarberClientsRoute
+  '/barber/notifications': typeof BarberNotificationsRoute
+  '/barber/profile': typeof BarberProfileRoute
+  '/barber/reviews': typeof BarberReviewsRoute
   '/admin/': typeof AdminIndexRoute
+  '/barber/': typeof BarberIndexRoute
   '/admin/finance/payouts': typeof AdminFinancePayoutsRoute
   '/admin/finance/transactions': typeof AdminFinanceTransactionsRoute
   '/admin/support/$ticketId': typeof AdminSupportTicketIdRoute
+  '/barber/salon-view/gallery': typeof BarberSalonViewGalleryRoute
+  '/barber/salon-view/reviews': typeof BarberSalonViewReviewsRoute
+  '/barber/salon-view/': typeof BarberSalonViewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
+    | '/barber'
     | '/admin/admins'
     | '/admin/audit'
     | '/admin/barbers'
@@ -217,10 +316,20 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/support'
     | '/admin/users'
+    | '/barber/bookings'
+    | '/barber/chat'
+    | '/barber/clients'
+    | '/barber/notifications'
+    | '/barber/profile'
+    | '/barber/reviews'
     | '/admin/'
+    | '/barber/'
     | '/admin/finance/payouts'
     | '/admin/finance/transactions'
     | '/admin/support/$ticketId'
+    | '/barber/salon-view/gallery'
+    | '/barber/salon-view/reviews'
+    | '/barber/salon-view/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -238,14 +347,25 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/support'
     | '/admin/users'
+    | '/barber/bookings'
+    | '/barber/chat'
+    | '/barber/clients'
+    | '/barber/notifications'
+    | '/barber/profile'
+    | '/barber/reviews'
     | '/admin'
+    | '/barber'
     | '/admin/finance/payouts'
     | '/admin/finance/transactions'
     | '/admin/support/$ticketId'
+    | '/barber/salon-view/gallery'
+    | '/barber/salon-view/reviews'
+    | '/barber/salon-view'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/barber'
     | '/admin/admins'
     | '/admin/audit'
     | '/admin/barbers'
@@ -260,19 +380,37 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/support'
     | '/admin/users'
+    | '/barber/bookings'
+    | '/barber/chat'
+    | '/barber/clients'
+    | '/barber/notifications'
+    | '/barber/profile'
+    | '/barber/reviews'
     | '/admin/'
+    | '/barber/'
     | '/admin/finance/payouts'
     | '/admin/finance/transactions'
     | '/admin/support/$ticketId'
+    | '/barber/salon-view/gallery'
+    | '/barber/salon-view/reviews'
+    | '/barber/salon-view/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  BarberRoute: typeof BarberRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/barber': {
+      id: '/barber'
+      path: '/barber'
+      fullPath: '/barber'
+      preLoaderRoute: typeof BarberRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -287,12 +425,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/barber/': {
+      id: '/barber/'
+      path: '/'
+      fullPath: '/barber/'
+      preLoaderRoute: typeof BarberIndexRouteImport
+      parentRoute: typeof BarberRoute
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/barber/reviews': {
+      id: '/barber/reviews'
+      path: '/reviews'
+      fullPath: '/barber/reviews'
+      preLoaderRoute: typeof BarberReviewsRouteImport
+      parentRoute: typeof BarberRoute
+    }
+    '/barber/profile': {
+      id: '/barber/profile'
+      path: '/profile'
+      fullPath: '/barber/profile'
+      preLoaderRoute: typeof BarberProfileRouteImport
+      parentRoute: typeof BarberRoute
+    }
+    '/barber/notifications': {
+      id: '/barber/notifications'
+      path: '/notifications'
+      fullPath: '/barber/notifications'
+      preLoaderRoute: typeof BarberNotificationsRouteImport
+      parentRoute: typeof BarberRoute
+    }
+    '/barber/clients': {
+      id: '/barber/clients'
+      path: '/clients'
+      fullPath: '/barber/clients'
+      preLoaderRoute: typeof BarberClientsRouteImport
+      parentRoute: typeof BarberRoute
+    }
+    '/barber/chat': {
+      id: '/barber/chat'
+      path: '/chat'
+      fullPath: '/barber/chat'
+      preLoaderRoute: typeof BarberChatRouteImport
+      parentRoute: typeof BarberRoute
+    }
+    '/barber/bookings': {
+      id: '/barber/bookings'
+      path: '/bookings'
+      fullPath: '/barber/bookings'
+      preLoaderRoute: typeof BarberBookingsRouteImport
+      parentRoute: typeof BarberRoute
     }
     '/admin/users': {
       id: '/admin/users'
@@ -392,6 +579,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/barber/salon-view/': {
+      id: '/barber/salon-view/'
+      path: '/salon-view'
+      fullPath: '/barber/salon-view/'
+      preLoaderRoute: typeof BarberSalonViewIndexRouteImport
+      parentRoute: typeof BarberRoute
+    }
+    '/barber/salon-view/reviews': {
+      id: '/barber/salon-view/reviews'
+      path: '/salon-view/reviews'
+      fullPath: '/barber/salon-view/reviews'
+      preLoaderRoute: typeof BarberSalonViewReviewsRouteImport
+      parentRoute: typeof BarberRoute
+    }
+    '/barber/salon-view/gallery': {
+      id: '/barber/salon-view/gallery'
+      path: '/salon-view/gallery'
+      fullPath: '/barber/salon-view/gallery'
+      preLoaderRoute: typeof BarberSalonViewGalleryRouteImport
+      parentRoute: typeof BarberRoute
+    }
     '/admin/support/$ticketId': {
       id: '/admin/support/$ticketId'
       path: '/$ticketId'
@@ -480,9 +688,39 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface BarberRouteChildren {
+  BarberBookingsRoute: typeof BarberBookingsRoute
+  BarberChatRoute: typeof BarberChatRoute
+  BarberClientsRoute: typeof BarberClientsRoute
+  BarberNotificationsRoute: typeof BarberNotificationsRoute
+  BarberProfileRoute: typeof BarberProfileRoute
+  BarberReviewsRoute: typeof BarberReviewsRoute
+  BarberIndexRoute: typeof BarberIndexRoute
+  BarberSalonViewGalleryRoute: typeof BarberSalonViewGalleryRoute
+  BarberSalonViewReviewsRoute: typeof BarberSalonViewReviewsRoute
+  BarberSalonViewIndexRoute: typeof BarberSalonViewIndexRoute
+}
+
+const BarberRouteChildren: BarberRouteChildren = {
+  BarberBookingsRoute: BarberBookingsRoute,
+  BarberChatRoute: BarberChatRoute,
+  BarberClientsRoute: BarberClientsRoute,
+  BarberNotificationsRoute: BarberNotificationsRoute,
+  BarberProfileRoute: BarberProfileRoute,
+  BarberReviewsRoute: BarberReviewsRoute,
+  BarberIndexRoute: BarberIndexRoute,
+  BarberSalonViewGalleryRoute: BarberSalonViewGalleryRoute,
+  BarberSalonViewReviewsRoute: BarberSalonViewReviewsRoute,
+  BarberSalonViewIndexRoute: BarberSalonViewIndexRoute,
+}
+
+const BarberRouteWithChildren =
+  BarberRoute._addFileChildren(BarberRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  BarberRoute: BarberRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
