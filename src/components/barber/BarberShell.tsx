@@ -18,6 +18,12 @@ import {
   ArrowLeftRight,
   Sparkles,
   Scissors,
+  Wallet,
+  BarChart3,
+  Megaphone,
+  Settings,
+  HelpCircle,
+  CalendarDays,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -46,16 +52,23 @@ type NavItem = {
   to: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
+  group?: string;
 };
 
 const INDEPENDENT_NAV: NavItem[] = [
-  { to: "/barber", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/barber/bookings", label: "Bronlar", icon: CalendarClock },
-  { to: "/barber/clients", label: "Mijozlar", icon: Users },
-  { to: "/barber/chat", label: "Chat", icon: MessageSquare },
-  { to: "/barber/reviews", label: "Sharhlar", icon: Star },
-  { to: "/barber/notifications", label: "Bildirishnomalar", icon: Bell },
-  { to: "/barber/profile", label: "Profil", icon: UserCog },
+  { to: "/barber", label: "Dashboard", icon: LayoutDashboard, group: "Asosiy" },
+  { to: "/barber/calendar", label: "Kalendar", icon: CalendarDays, group: "Asosiy" },
+  { to: "/barber/bookings", label: "Bronlar", icon: CalendarClock, group: "Asosiy" },
+  { to: "/barber/clients", label: "Mijozlar", icon: Users, group: "Asosiy" },
+  { to: "/barber/chat", label: "Chat", icon: MessageSquare, group: "Aloqa" },
+  { to: "/barber/notifications", label: "Bildirishnomalar", icon: Bell, group: "Aloqa" },
+  { to: "/barber/reviews", label: "Sharhlar", icon: Star, group: "Aloqa" },
+  { to: "/barber/earnings", label: "Daromad", icon: Wallet, group: "Biznes" },
+  { to: "/barber/stats", label: "Statistika", icon: BarChart3, group: "Biznes" },
+  { to: "/barber/marketing", label: "Marketing", icon: Megaphone, group: "Biznes" },
+  { to: "/barber/profile", label: "Profil", icon: UserCog, group: "Sozlama" },
+  { to: "/barber/settings", label: "Sozlamalar", icon: Settings, group: "Sozlama" },
+  { to: "/barber/help", label: "Yordam", icon: HelpCircle, group: "Sozlama" },
 ];
 
 const SALON_NAV: NavItem[] = [
