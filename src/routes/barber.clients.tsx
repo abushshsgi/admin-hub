@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Search, Phone } from "lucide-react";
 import { useState } from "react";
 import { useBarberContext, formatUZS } from "@/components/barber/BarberContext";
-import { EmptyState } from "@/components/admin/EmptyState";
+import { EmptyBlock } from "@/components/barber/primitives";
 
 export const Route = createFileRoute("/barber/clients")({
   component: ClientsPage,
